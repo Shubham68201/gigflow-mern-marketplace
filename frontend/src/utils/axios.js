@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL + '/api',
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json'
@@ -10,19 +10,13 @@ const api = axios.create({
 
 // Request interceptor for debugging
 api.interceptors.request.use(
-  (config) => {
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (config) => config,
+  (error) => Promise.reject(error)
 );
 
 // Response interceptor for error handling
 api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
     const message = error.response?.data?.message || 'Something went wrong';
     const customError = new Error(message);
